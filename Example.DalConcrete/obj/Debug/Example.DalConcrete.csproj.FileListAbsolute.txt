@@ -1,0 +1,9 @@
+C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.DalConcrete\obj\Debug\Example.DalConcrete.csprojResolveAssemblyReference.cache
+C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.DalConcrete\bin\Debug\Example.DalConcrete.dll
+C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.DalConcrete\bin\Debug\Example.DalConcrete.pdb
+C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.DalConcrete\bin\Debug\Autofac.dll
+C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.DalConcrete\bin\Debug\Example.Dal.dll
+C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.DalConcrete\bin\Debug\Example.Dal.pdb
+C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.DalConcrete\bin\Debug\Autofac.xml
+C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.DalConcrete\obj\Debug\Example.DalConcrete.dll
+C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.DalConcrete\obj\Debug\Example.DalConcrete.pdb
