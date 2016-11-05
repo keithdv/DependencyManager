@@ -9,17 +9,28 @@ using Example.Dal;
 
 namespace Example.Lib
 {
+
+    public delegate IRoot FetchRoot();
+    public delegate IRoot FetchRootGuid(Guid criteria);
+
     [Serializable]
-    public class Root : DPBusinessBase<Root>, IRoot, IHandleObjectPortalFetch, IHandleObjectPortalFetch<Guid>
+    internal class Root : DPBusinessBase<Root>, IRoot, IHandleObjectPortalFetch, IHandleObjectPortalFetch<Guid>
     {
 
-        public static DependencyPropertyInfo<IObjectPortal<IBusinessItemList>> BusinessItemListPortalProperty = new DependencyPropertyInfo<IObjectPortal<IBusinessItemList>>(nameof(BusinessItemListPortal));
+        public static DependencyPropertyInfo<FetchBusinessItemList> BusinessItemListPortalProperty = new DependencyPropertyInfo<FetchBusinessItemList>(nameof(CreateBusinessItemList));
 
-        public IObjectPortal<IBusinessItemList> BusinessItemListPortal
+        public FetchBusinessItemList CreateBusinessItemList
         {
             get { return GetDependencyProperty(BusinessItemListPortalProperty); }
         }
-        
+
+        public static DependencyPropertyInfo<FetchBusinessItemListGuid> CreateBusinessItemListGuidProperty = new DependencyPropertyInfo<FetchBusinessItemListGuid>(nameof(CreateBusinessItemListGuid));
+
+        public FetchBusinessItemListGuid CreateBusinessItemListGuid
+        {
+            get { return GetDependencyProperty(CreateBusinessItemListGuidProperty); }
+        }
+
         public static readonly PropertyInfo<IBusinessItemList> BusinessItemListProperty = RegisterProperty<IBusinessItemList>(c => c.BusinessItemList);
         public IBusinessItemList BusinessItemList
         {
@@ -29,12 +40,12 @@ namespace Example.Lib
 
         void IHandleObjectPortalFetch.Fetch()
         {
-            BusinessItemList = BusinessItemListPortal.Fetch();
+            BusinessItemList = CreateBusinessItemList();
         }
 
         public void Fetch(Guid criteria)
         {
-            BusinessItemList = BusinessItemListPortal.Fetch(criteria);
+            BusinessItemList = CreateBusinessItemListGuid(criteria);
         }
 
     }

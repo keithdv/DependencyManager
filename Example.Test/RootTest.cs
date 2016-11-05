@@ -27,16 +27,11 @@ namespace Example.Test
 
                 builder.RegisterGeneric(typeof(ObjectPortal<>)).As(typeof(IObjectPortal<>));
 
-                // In actual implementation this would be in modules
-                // But I want to keep it all in one place for discussion
-                builder.RegisterType<Root>().As<IRoot>();
-                builder.RegisterType<BusinessItem>().As<IBusinessItem>();
-                builder.RegisterType<BusinessItemList>().As<IBusinessItemList>();
 
                 builder.RegisterType<RootDal>().AsImplementedInterfaces();
                 builder.RegisterType<BusinessItemDal>().AsImplementedInterfaces();
 
-
+                builder.RegisterModule<LibModule>();
                 builder.RegisterType<DependencyManager>();
 
                 container = builder.Build();
@@ -51,19 +46,19 @@ namespace Example.Test
         public void Root_Fetch()
         {
 
-            var portal = scope.Resolve<IObjectPortal<IRoot>>();
+            var fetchRoot = scope.Resolve<FetchRoot>();
 
-            var result = portal.Fetch();
+            var result = fetchRoot();
 
         }
 
         [TestMethod]
         public void Root_Fetch_Criteria()
         {
-            var portal = scope.Resolve<IObjectPortal<IRoot>>();
+            var portal = scope.Resolve<FetchRootGuid>();
             var criteria = Guid.NewGuid();
 
-            var result = portal.Fetch(criteria);
+            var result = portal(criteria);
 
             Assert.AreEqual(criteria, result.BusinessItemList[0].Criteria);
 
@@ -73,9 +68,9 @@ namespace Example.Test
         public void Root_BusinessRule()
         {
 
-            var portal = scope.Resolve<IObjectPortal<IRoot>>();
+            var portal = scope.Resolve<FetchRoot>();
 
-            var result = portal.Fetch();
+            var result = portal();
 
             result.BusinessItemList[0].Name = Guid.NewGuid().ToString();
 

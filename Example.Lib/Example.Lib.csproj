@@ -55,6 +55,7 @@
     <Compile Include="IBusinessItem.cs" />
     <Compile Include="IBusinessItemList.cs" />
     <Compile Include="IRoot.cs" />
+    <Compile Include="LibModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Root.cs" />
   </ItemGroup>

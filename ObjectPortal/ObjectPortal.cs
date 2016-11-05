@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac.Core;
+using Autofac.Builder;
+using Autofac;
 
 namespace ObjectPortal
 {
-
+    
     /// <summary>
     /// Abstract BO object creating, fetching and updating each other
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ObjectPortal<T> : IObjectPortal<T>
     {
+
+
 
         Func<T> createT;
         Func<DependencyManager> createDM;
@@ -34,14 +39,14 @@ namespace ObjectPortal
 
             var fetch = result as IHandleObjectPortalFetch;
 
-            if(fetch == null)
+            if (fetch == null)
             {
                 throw new ObjectPortalOperationNotSupportedException("Fetch with no criteria not supported");
             }
 
             var dtoBB = result as IDPBusinessObject;
 
-            if(dtoBB != null)
+            if (dtoBB != null)
             {
                 dtoBB.DependencyManager = createDM();
             }

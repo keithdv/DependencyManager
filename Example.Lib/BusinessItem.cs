@@ -12,9 +12,13 @@ using Csla.Rules;
 
 namespace Example.Lib
 {
+
+    public delegate IBusinessItem FetchBusinessItem(BusinessItemDto criteria);
+
     [Serializable]
-    public class BusinessItem : DPBusinessBase<BusinessItem>, IBusinessItem
+    internal class BusinessItem : DPBusinessBase<BusinessItem>, IBusinessItem
     {
+
         // Thought: "new DependencyPropertyInfo" should be a base class call like RegisterProperty
         public static readonly DependencyPropertyInfo<IBusinessItemDal> DalProperty = new DependencyPropertyInfo<IBusinessItemDal>(nameof(Dal));
         public IBusinessItemDal Dal
@@ -71,7 +75,7 @@ namespace Example.Lib
             BusinessRules.AddRule(new DependencyBusinessRUle(NameProperty, DalProperty));
         }
 
-        public class DependencyBusinessRUle : DependencyBusinessRule
+        internal class DependencyBusinessRUle : DependencyBusinessRule
         {
 
             public DependencyBusinessRUle(IPropertyInfo nameProperty, IDependencyPropertyInfo<IBusinessItemDal> dalDep) : base(nameProperty)

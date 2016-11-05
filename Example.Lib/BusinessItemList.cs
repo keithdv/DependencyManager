@@ -9,16 +9,21 @@ using Example.Dal;
 
 namespace Example.Lib
 {
+
+    public delegate IBusinessItemList FetchBusinessItemList();
+    public delegate IBusinessItemList FetchBusinessItemListGuid(Guid criteria);
+
     [Serializable]
-    public class BusinessItemList : DtoBusinessListBase<BusinessItemList, IBusinessItem>, IBusinessItemList
+    internal class BusinessItemList : DtoBusinessListBase<BusinessItemList, IBusinessItem>, IBusinessItemList
     {
         
-        public static DependencyPropertyInfo<IObjectPortal<IBusinessItem>> ItemPortalProperty = new DependencyPropertyInfo<IObjectPortal<IBusinessItem>>(nameof(ItemPortal));
+        public static DependencyPropertyInfo<FetchBusinessItem> FetchBusinessItemProperty = new DependencyPropertyInfo<FetchBusinessItem>(nameof(FetchBusinessItemProperty));
 
-        public IObjectPortal<IBusinessItem> ItemPortal
+        public FetchBusinessItem FetchBusinessItem
         {
-            get { return GetDependencyProperty(ItemPortalProperty); }
+            get { return GetDependencyProperty(FetchBusinessItemProperty); }
         }
+
 
         public static readonly DependencyPropertyInfo<IBusinessItemDal> DalProperty = new DependencyPropertyInfo<IBusinessItemDal>(nameof(Dal));
         public IBusinessItemDal Dal
@@ -32,7 +37,7 @@ namespace Example.Lib
 
             foreach(var d in dtos)
             {
-                Add(ItemPortal.Fetch(d));
+                Add(FetchBusinessItem(d));
             }
 
         }
@@ -44,7 +49,7 @@ namespace Example.Lib
 
             foreach (var d in dtos)
             {
-                Add(ItemPortal.Fetch(d));
+                Add(FetchBusinessItem(d));
             }
 
         }
