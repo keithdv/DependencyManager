@@ -46,6 +46,7 @@ namespace Example.Test
         public void Root_Fetch()
         {
 
+
             var fetchRoot = scope.Resolve<FetchRoot>();
 
             var result = fetchRoot();

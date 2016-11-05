@@ -5,10 +5,66 @@ using System.Text;
 using Autofac.Core;
 using Autofac.Builder;
 using Autofac;
+using System.Reflection;
+using System.Linq.Expressions;
 
 namespace ObjectPortal
 {
-    
+
+    public static class ObjectPortal
+    {
+
+
+        public static void ObjectPortalFetch(this ContainerBuilder builder, Type delegateType)
+        {
+
+            // Some serious WTF code!
+
+            // We assume delegateType is a Delegate. 
+            // The business object type we need is the return type of Delegate.Invoke.
+            var invoke = delegateType.GetMethod("Invoke");
+            var boType = invoke.ReturnType;
+
+            // Need to resolve an IObjectPortal<BusinessObjectType>
+            var opType = typeof(IObjectPortal<>).MakeGenericType(boType);
+
+            var fetchMethods = typeof(ObjectPortal<>)
+                .MakeGenericType(boType)
+                .GetMethods()
+                .Where(x => x.Name == "Fetch").ToList();
+            MethodInfo fetchMethod = null;
+
+            // ObjectPortal concrete has two fetch methods
+            // One that takes parameters and one that doesn't
+            // Chose the right one based on our delegate
+            if(invoke.GetParameters().Count() == 0)
+            {
+                fetchMethod = fetchMethods.Where(x => x.GetParameters().Count() == 0).First();
+            } else
+            {
+                fetchMethod = fetchMethods.Where(x => x.GetParameters().Count() > 0).First();
+            }
+
+            // We need to match the delegateType signature
+            // So Fetch<C> needs to be Fetch<Criteria>
+            // Again we look to our invoke for this
+            // Brittle: Only one parameter
+            if (fetchMethod.IsGenericMethod)
+            {
+                fetchMethod = fetchMethod.MakeGenericMethod(invoke.GetParameters().First().ParameterType);
+            }
+
+            builder.Register((c) =>
+            {
+                var portal = c.Resolve(opType);
+
+                return Convert.ChangeType(Delegate.CreateDelegate(delegateType, portal, fetchMethod), delegateType);
+
+            }).As(delegateType);
+
+        }
+    }
+
     /// <summary>
     /// Abstract BO object creating, fetching and updating each other
     /// </summary>

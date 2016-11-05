@@ -21,35 +21,18 @@ namespace Example.Lib
             // Need to find a way to make this generic
             // Delegates and generics do not play nice together!!
 
-            builder.Register<FetchRoot>((c) =>
-            {
-                var portal = c.Resolve<IObjectPortal<IRoot>>();
-                return () => portal.Fetch(); // C# lets you implicitly convert a lamda to a delegate...can't do this anywhere else!
-            });
+            //builder.Register<FetchRoot>((c) =>
+            //{
+            //    var portal = c.Resolve<IObjectPortal<IRoot>>();
+            //    return () => portal.Fetch(); // C# lets you implicitly convert a lamda to a delegate...can't do this anywhere else!
+            //});
 
-            builder.Register<FetchRootGuid>((c) =>
-            {
-                var portal = c.Resolve<IObjectPortal<IRoot>>();
-                return (crit) => portal.Fetch(crit);
-            });
-
-            builder.Register<FetchBusinessItem>((c) =>
-            {
-                var portal = c.Resolve<IObjectPortal<IBusinessItem>>();
-                return (d) => { return portal.Fetch(d); };
-            });
-
-            builder.Register<FetchBusinessItemList>((c) =>
-            {
-                var portal = c.Resolve<IObjectPortal<IBusinessItemList>>();
-                return () => { return portal.Fetch(); }; ;
-            });
-
-            builder.Register<FetchBusinessItemListGuid>((c) =>
-            {
-                var portal = c.Resolve<IObjectPortal<IBusinessItemList>>();
-                return (crit) => { return portal.Fetch(crit); }; ;
-            });
+            // Update - Best I came up with
+            builder.ObjectPortalFetch(typeof(FetchRoot));
+            builder.ObjectPortalFetch(typeof(FetchRootGuid));
+            builder.ObjectPortalFetch(typeof(FetchBusinessItem));
+            builder.ObjectPortalFetch(typeof(FetchBusinessItemList));
+            builder.ObjectPortalFetch(typeof(FetchBusinessItemListGuid));
 
         }
 
