@@ -14,44 +14,68 @@ namespace ObjectPortal
     public static class ObjectPortal
     {
 
+        private delegate void Nothing();
 
         public static void ObjectPortalFetch(this ContainerBuilder builder, Type delegateType)
         {
 
             // Some serious WTF code!
 
+            if (delegateType == null)
+            {
+                throw new ArgumentNullException(nameof(delegateType));
+            }
+
+            if (!typeof(Delegate).IsAssignableFrom(delegateType))
+            {
+                throw new Exception("Only Delegates types allowed.");
+            }
+
+
             // We assume delegateType is a Delegate. 
             // The business object type we need is the return type of Delegate.Invoke.
-            var invoke = delegateType.GetMethod("Invoke");
+            var invoke = delegateType.GetMethod(nameof(Nothing.Invoke)); // Better way to get "Invoke"???
+
             var boType = invoke.ReturnType;
+
+
+            if (invoke == null)
+            {
+                throw new Exception($"Unable to load invoke method on ${delegateType.Name}");
+            }
+
+            var parameterCount = invoke.GetParameters().Count();
+
+            if (parameterCount > 1)
+            {
+                throw new Exception($"Delegate ${delegateType.Name} cannot have more than one method parameter.");
+            }
 
             // Need to resolve an IObjectPortal<BusinessObjectType>
             var opType = typeof(IObjectPortal<>).MakeGenericType(boType);
 
-            var fetchMethods = typeof(ObjectPortal<>)
-                .MakeGenericType(boType)
-                .GetMethods()
-                .Where(x => x.Name == "Fetch").ToList();
             MethodInfo fetchMethod = null;
 
             // ObjectPortal concrete has two fetch methods
             // One that takes parameters and one that doesn't
-            // Chose the right one based on our delegate
-            if(invoke.GetParameters().Count() == 0)
+            // Chose the right one based on the parameters our delegate
+            if (parameterCount == 0)
             {
-                fetchMethod = fetchMethods.Where(x => x.GetParameters().Count() == 0).First();
-            } else
-            {
-                fetchMethod = fetchMethods.Where(x => x.GetParameters().Count() > 0).First();
+                fetchMethod = opType.GetMethod(nameof(ObjectPortal<object>.Fetch), new Type[0]);
             }
-
-            // We need to match the delegateType signature
-            // So Fetch<C> needs to be Fetch<Criteria>
-            // Again we look to our invoke for this
-            // Brittle: Only one parameter
-            if (fetchMethod.IsGenericMethod)
+            else
             {
-                fetchMethod = fetchMethod.MakeGenericMethod(invoke.GetParameters().First().ParameterType);
+
+                // parameterCount = 1
+
+                fetchMethod = opType.GetMethods().Where(x => x.Name == nameof(ObjectPortal<object>.Fetch) && x.IsGenericMethod).First();
+
+                // We need to match the delegateType signature
+                // So Fetch<C> needs to be Fetch<Criteria>
+                // Again we look to our invoke for this
+                var paramType = invoke.GetParameters().First().ParameterType;
+                fetchMethod = fetchMethod.MakeGenericMethod(paramType);
+
             }
 
             builder.Register((c) =>
