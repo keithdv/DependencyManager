@@ -1,7 +1,0 @@
-C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.Dal\obj\Debug\Example.Dal.csprojResolveAssemblyReference.cache
-C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.Dal\bin\Debug\Example.Dal.dll
-C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.Dal\bin\Debug\Example.Dal.pdb
-C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.Dal\bin\Debug\Autofac.dll
-C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.Dal\bin\Debug\Autofac.xml
-C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.Dal\obj\Debug\Example.Dal.dll
-C:\Users\KeithVoels\Documents\GitHub\DependencyManager\Example.Dal\obj\Debug\Example.Dal.pdb
