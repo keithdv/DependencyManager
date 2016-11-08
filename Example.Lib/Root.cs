@@ -14,7 +14,7 @@ namespace Example.Lib
     public delegate IRoot FetchRootGuid(Guid criteria);
 
     [Serializable]
-    internal class Root : DPBusinessBase<Root>, IRoot, IHandleObjectPortalFetch, IHandleObjectPortalFetch<Guid>
+    internal class Root : DPBusinessBase<Root>, IRoot, IHandleObjectPortalFetch, IHandleObjectPortalFetch<Guid>, IHandleObjectPortalUpdate
     {
 
         public static DependencyPropertyInfo<FetchBusinessItemList> BusinessItemListPortalProperty = new DependencyPropertyInfo<FetchBusinessItemList>(nameof(CreateBusinessItemList));
@@ -29,6 +29,13 @@ namespace Example.Lib
         public FetchBusinessItemListGuid CreateBusinessItemListGuid
         {
             get { return GetDependencyProperty(CreateBusinessItemListGuidProperty); }
+        }
+
+        public static DependencyPropertyInfo<ObjectPortalUpdate<IBusinessItemList>> UpdateBusinessItemListProperty = new DependencyPropertyInfo<ObjectPortalUpdate<IBusinessItemList>>(nameof(UpdateBusinessItemList));
+
+        public ObjectPortalUpdate<IBusinessItemList> UpdateBusinessItemList
+        {
+            get { return GetDependencyProperty(UpdateBusinessItemListProperty); }
         }
 
         public static readonly PropertyInfo<IBusinessItemList> BusinessItemListProperty = RegisterProperty<IBusinessItemList>(c => c.BusinessItemList);
@@ -48,5 +55,14 @@ namespace Example.Lib
             BusinessItemList = CreateBusinessItemListGuid(criteria);
         }
 
+        public void Insert()
+        {
+            UpdateBusinessItemList(BusinessItemList);
+        }
+
+        public void Update()
+        {
+            UpdateBusinessItemList(BusinessItemList);
+        }
     }
 }

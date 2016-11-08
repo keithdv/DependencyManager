@@ -21,4 +21,16 @@ namespace ObjectPortal
 
     }
 
+    public interface IHandleObjectPortalUpdate
+    {
+        void Insert();
+        void Update();
+    }
+
+    public interface IHandleObjectPortalUpdate<T>
+    {
+        void Insert(T criteria);
+        void Update(T criteria);
+    }
+
 }

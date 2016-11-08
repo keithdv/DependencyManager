@@ -79,22 +79,19 @@ namespace Example.Test
 
         }
 
-        //[TestMethod]
-        //public void Root_Fetch_Save()
-        //{
-        //    var portal = scope.Resolve<IObjectPortal<IRoot>>();
-        //    var criteria = Guid.NewGuid();
+        [TestMethod]
+        public void Root_Update()
+        {
+            var portal = scope.Resolve<FetchRoot>();
+            var result = portal();
 
-        //    var result = portal.Fetch(criteria);
+            var update = scope.Resolve<ObjectPortalUpdate<IRoot>>();
 
-        //    result.SaveDto();
+            update(result);
 
-        //    Assert.AreEqual(2, result.BusinessItemList.Count);
 
-        //    foreach(var r in result.BusinessItemList)
-        //    {
-        //        Assert.IsNotNull(r.UpdatedID);
-        //    }
-        //}
+
+        }
+
     }
 }

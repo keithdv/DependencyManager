@@ -14,9 +14,10 @@ namespace Example.Lib
 {
 
     public delegate IBusinessItem FetchBusinessItem(BusinessItemDto criteria);
+    public delegate void UpdateBusinessItem(IBusinessItem bo, Guid criteria);
 
     [Serializable]
-    internal class BusinessItem : DPBusinessBase<BusinessItem>, IBusinessItem
+    internal class BusinessItem : DPBusinessBase<BusinessItem>, IBusinessItem, IHandleObjectPortalUpdate<Guid>
     {
 
         // Thought: "new DependencyPropertyInfo" should be a base class call like RegisterProperty
@@ -73,6 +74,30 @@ namespace Example.Lib
         {
             base.AddBusinessRules();
             BusinessRules.AddRule(new DependencyBusinessRUle(NameProperty, DalProperty));
+        }
+
+        public void Insert(Guid criteria)
+        {
+
+            var dto = new BusinessItemDto();
+            Dal.Update(dto);
+
+            using (BypassPropertyChecks)
+            {
+                this.UpdatedID = dto.UpdateUniqueID;
+            }
+
+        }
+
+        public void Update(Guid criteria)
+        {
+            var dto = new BusinessItemDto();
+            Dal.Update(dto);
+
+            using (BypassPropertyChecks)
+            {
+                this.UpdatedID = dto.UpdateUniqueID;
+            }
         }
 
         internal class DependencyBusinessRUle : DependencyBusinessRule

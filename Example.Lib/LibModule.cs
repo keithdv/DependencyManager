@@ -34,6 +34,10 @@ namespace Example.Lib
             builder.ObjectPortalFetch(typeof(FetchBusinessItemList));
             builder.ObjectPortalFetch(typeof(FetchBusinessItemListGuid));
 
+            builder.ObjectPortalUpdate(typeof(IRoot));
+            builder.ObjectPortalUpdate(typeof(IBusinessItemList));
+            builder.ObjectPortalUpdate(typeof(UpdateBusinessItem));
+
         }
 
     }
